@@ -1,1 +1,27 @@
-Generic single-database configuration.
+1. Creates a table named `category_game_items` with the following columns:
+   - `id`: Integer, Not Null
+   - `name`: String (length 256), Not Null
+   - `description`: String (length 512), Not Null
+   - Primary Key: `id`
+   - Unique Constraint: `name`
+
+2. Creates a table named `game_items` with the following columns:
+   - `id`: Integer, Not Null
+   - `name`: String (length 256), Not Null
+   - `description`: String (length 512), Not Null
+   - `quantity`: Integer, Not Null
+   - `price`: Float, Not Null
+   - `category_id`: Integer, Not Null
+   - Foreign Key: `category_id` references `category_game_items.id`
+   - Primary Key: `id`
+   - Unique Constraint: `name`
+   - 
+3. Creates a table named `users` with the following columns:
+   - `id`: Integer, Not Null
+   - `name`: String (length 256), Not Null
+   - `description`: String (length 512), Not Null
+   - `is_active`: Boolean, Not Null
+   - `hashed_password`: String, Not Null
+   - Primary Key: `id`
+   - Unique Constraint: `name`
+
