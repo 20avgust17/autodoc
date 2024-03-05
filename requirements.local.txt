@@ -1,0 +1,28 @@
+fastapi
+jinja2
+uvicorn
+sqlalchemy
+psycopg2
+
+alembic
+python-multipart
+pydantic-settings
+
+#pydantic extensions
+python-dotenv
+
+#for testing
+pytest
+pytest-asyncio
+httpx
+locust
+requests
+coverage
+
+#for jwt tokens
+python-jose
+
+#for pre-commit
+pre-commit
+
+passlib[bcrypt]~=1.7.4

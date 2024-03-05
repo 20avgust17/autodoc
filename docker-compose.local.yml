@@ -1,0 +1,98 @@
+version: "3.9"
+
+services:
+  src:
+    build:
+      context: .
+    command: "uvicorn src.main:app --host 0.0.0.0"
+    container_name: fastapi-backend-autodoc-local
+    restart: always
+    environment:
+      - "PORT=${SRC_PORT}"
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+      - DEBUG=1
+    ports:
+      - "${SRC_PORT}:${DOCKER_PORT}"
+    depends_on:
+      db-live:
+        condition: service_healthy
+
+  db-live:
+    container_name: postgres_container
+    image: postgres:14.8-alpine3.18
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=50"
+      - "-c"
+      - "shared_buffers=1GB"
+      - "-c"
+      - "effective_cache_size=4GB"
+      - "-c"
+      - "work_mem=16MB"
+      - "-c"
+      - "maintenance_work_mem=512MB"
+      - "-c"
+      - "random_page_cost=1.1"
+      - "-c"
+      - "temp_file_limit=10GB"
+      - "-c"
+      - "log_min_duration_statement=200ms"
+      - "-c"
+      - "idle_in_transaction_session_timeout=10s"
+      - "-c"
+      - "lock_timeout=1s"
+      - "-c"
+      - "statement_timeout=60s"
+      - "-c"
+      - "shared_preload_libraries=pg_stat_statements"
+      - "-c"
+      - "pg_stat_statements.max=10000"
+      - "-c"
+      - "pg_stat_statements.track=all"
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+      - "POSTGRES_USER=${POSTGRES_USER_LIVE}"
+      - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD_LIVE}"
+      - "POSTGRES_DB=${POSTGRES_DB_LIVE}"
+    volumes:
+      - ../2. Init Database:/docker-entrypoint-initdb.d
+      - autodoc-data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT_LIVE}:${POSTGRES_PORT_LIVE}"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER_LIVE} -d ${db-live}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 4G
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4:7.2
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "${PGADMIN_DEFAULT_EMAIL}"
+      PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_DEFAULT_PASSWORD}"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    ports:
+      - "${PGADMIN_PORT}:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+
+
+volumes:
+  autodoc-data:
+  pgadmin-data:
+
