@@ -1,9 +1,8 @@
+# core
 fastapi
-jinja2
 uvicorn
 sqlalchemy
 psycopg2
-
 alembic
 python-multipart
 pydantic-settings
@@ -22,7 +21,5 @@ coverage
 #for jwt tokens
 python-jose
 
-#for pre-commit
-pre-commit
-
+# for password encryption
 passlib[bcrypt]~=1.7.4

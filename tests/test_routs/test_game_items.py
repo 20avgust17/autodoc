@@ -119,7 +119,7 @@ class TestPostGameItem:
             create_game_item
     ):
         """
-        Tests report returns correct data that equals to the predefined one.
+        Test report returns validation error 409
         """
         await async_client.post(
             url='/items_manager/items/',
@@ -140,7 +140,7 @@ class TestPostGameItem:
             normal_user_token_headers,
     ):
         """
-        Tests report returns correct data that equals to the predefined one.
+        Test report returns validation error 422
         """
         response = await async_client.post(
             url='/items_manager/items/',
@@ -195,7 +195,7 @@ class TestPatchGameItem:
             update_game_item,
     ):
         """
-        Tests report returns correct data that equals to the predefined one.
+        Test report returns validation error 404
         """
         response = await async_client.patch(
             url='/items_manager/items/3/',
@@ -212,7 +212,7 @@ class TestPatchGameItem:
             update_game_item_failed_name
     ):
         """
-        Tests report returns correct data that equals to the predefined one.
+        Test report returns validation error 409
         """
         response = await async_client.patch(
             url='/items_manager/items/1/',
@@ -229,7 +229,7 @@ class TestPatchGameItem:
             update_game_item,
     ):
         """
-        Tests report returns correct data that equals to the predefined one.
+        Test report returns validation error 422
         """
         response = await async_client.patch(
             url='/items_manager/items/1/',
@@ -277,7 +277,7 @@ class TestDeleteGameItem:
             create_game_item
     ):
         """
-        Tests report returns correct data that equals to the predefined one.
+        Test report returns validation error 404
         """
         response = await async_client.delete(
             url='/items_manager/items/3/',
